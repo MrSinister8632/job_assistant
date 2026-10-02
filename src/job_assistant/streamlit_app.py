@@ -17,16 +17,16 @@ st.sidebar.title("Job Assistant")
 page = st.navigation(
     {
         "Search": [
-            st.Page(search.render, title="Search", icon="🔍", default=True),
+            st.Page(search.render, title="Search", icon="🔍", default=True, url_path="search"),
         ],
         "Review": [
-            st.Page(review.render, title="Review jobs", icon="📋"),
+            st.Page(review.render, title="Review jobs", icon="📋", url_path="review"),
         ],
         "Track": [
-            st.Page(applications.render, title="Applications & Interviews", icon="📅"),
+            st.Page(applications.render, title="Applications & Interviews", icon="📅", url_path="applications"),
         ],
         "Configure": [
-            st.Page(settings.render, title="Settings", icon="⚙️"),
+            st.Page(settings.render, title="Settings", icon="⚙️", url_path="settings"),
         ],
     }
 )
