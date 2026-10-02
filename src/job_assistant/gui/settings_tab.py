@@ -28,6 +28,9 @@ class SettingsTab(QWidget):
         self.location_mode.addItems(["open_to_relocate", "remote", "specific"])
         self.location_mode.setCurrentText(settings.location_mode)
         self.location = QLineEdit(settings.location)
+        self.location_label = QLabel("Specific location:")
+        self.location_mode.currentTextChanged.connect(self._toggle_location)
+        self._toggle_location(settings.location_mode)
 
         self.resume_path = QLineEdit(settings.resume_path)
         self.knowledge_path = QLineEdit(settings.knowledge_path)
@@ -41,7 +44,7 @@ class SettingsTab(QWidget):
         form.addRow("Adzuna app key:", self.adzuna_key)
         form.addRow("JSearch API key:", self.jsearch_key)
         form.addRow("Location mode:", self.location_mode)
-        form.addRow("Specific location:", self.location)
+        form.addRow(self.location_label, self.location)
         form.addRow("Resume file:", self._file_picker(self.resume_path, "Resume files (*.doc *.docx *.pdf)"))
         form.addRow("Knowledge file:", self._file_picker(self.knowledge_path, "Markdown/text (*.md *.txt)"))
         form.addRow("Resume length (pages):", self.resume_pages)
@@ -69,6 +72,11 @@ class SettingsTab(QWidget):
         path, _ = QFileDialog.getOpenFileName(self, "Select file", "", filter_)
         if path:
             line.setText(path)
+
+    def _toggle_location(self, mode: str) -> None:
+        visible = mode == "specific"
+        self.location.setVisible(visible)
+        self.location_label.setVisible(visible)
 
     def save(self) -> None:
         self.settings.gemini_api_key = self.gemini_key.text().strip()

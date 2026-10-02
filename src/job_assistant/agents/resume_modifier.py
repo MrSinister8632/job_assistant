@@ -21,7 +21,7 @@ SYSTEM = (
 TEMPLATE_PATH = Path(__file__).resolve().parents[3] / "templates" / "resume.tex"
 
 
-def _read_base_resume(settings: Settings) -> str:
+def read_base_resume(settings: Settings) -> str:
     p = Path(settings.resume_path)
     if not p.exists():
         return "(no base resume file found)"
@@ -38,7 +38,7 @@ def _read_base_resume(settings: Settings) -> str:
 
 
 def tailor_resume(settings: Settings, job_title: str, company: str, description: str, extra_info: str = "") -> tuple[str, Path, int]:
-    base = _read_base_resume(settings)
+    base = read_base_resume(settings)
     knowledge = ""
     if settings.knowledge_path and Path(settings.knowledge_path).exists():
         knowledge = Path(settings.knowledge_path).read_text(encoding="utf-8", errors="ignore")
@@ -74,7 +74,7 @@ def tailor_resume(settings: Settings, job_title: str, company: str, description:
 
 
 def cover_letter(settings: Settings, job_title: str, company: str, description: str, extra_info: str = "") -> str:
-    base = _read_base_resume(settings)
+    base = read_base_resume(settings)
     system = (
         "Write a concise, professional cover letter (under 300 words) for the given job. "
         "Use only facts from the resume. Plain text output only."

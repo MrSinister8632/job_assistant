@@ -5,6 +5,7 @@ import threading
 from PySide6.QtCore import Signal, QObject
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QFormLayout, QLineEdit, QSpinBox, QPushButton, QLabel,
+    QCheckBox,
 )
 
 from ..config import Settings
@@ -31,6 +32,8 @@ class SearchTab(QWidget):
         self.count.setValue(20)
         form.addRow("Keywords:", self.keywords)
         form.addRow("Max results:", self.count)
+        self.use_resume_keywords = QCheckBox("Also derive keywords from my resume")
+        form.addRow("", self.use_resume_keywords)
 
         self.run_btn = QPushButton("Search jobs")
         self.run_btn.clicked.connect(self.run_search)
@@ -43,8 +46,9 @@ class SearchTab(QWidget):
         layout.addStretch()
 
     def run_search(self) -> None:
-        kw = self.keywords.text().strip()
-        if not kw:
+        manual = self.keywords.text().strip()
+        use_resume = self.use_resume_keywords.isChecked()
+        if not manual and not use_resume:
             self.status.setText("Enter keywords first.")
             return
         self.run_btn.setEnabled(False)
@@ -52,8 +56,29 @@ class SearchTab(QWidget):
 
         def work():
             try:
-                found, new = jobs_mod.search(self.settings, kw, self.count.value())
-                self.signals.done.emit(found, new)
+                queries = [manual] if manual else []
+                if use_resume:
+                    try:
+                        from ..agents.resume_modifier import read_base_resume
+                        from ..llm import complete
+
+                        resume_text = read_base_resume(self.settings)
+                        derived = complete(
+                            self.settings,
+                            f"Resume:\n{resume_text[:4000]}\n\nExtract 3-5 concise job search queries "
+                            "(e.g. 'python backend developer'), one per line. Output only the queries, one per line.",
+                            "You are a job search assistant. Output only queries, one per line.",
+                        )
+                        queries += [line.strip().strip('-*•"') for line in derived.splitlines() if line.strip()]
+                    except Exception as e:  # noqa: BLE001
+                        self.signals.error.emit(f"Could not derive resume keywords: {e}")
+                        return
+                total_found, total_new = 0, 0
+                for q in queries:
+                    found, new = jobs_mod.search(self.settings, q, self.count.value())
+                    total_found += found
+                    total_new += new
+                self.signals.done.emit(total_found, total_new)
             except Exception as e:  # noqa: BLE001
                 self.signals.error.emit(str(e))
 
