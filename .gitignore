@@ -14,3 +14,8 @@ PLAN.md
 
 # env files
 .env
+# Bundled Tectonic binary (51MB, downloaded separately)
+bin/
+
+# Local data (API keys, DB, generated docs)
+data/
