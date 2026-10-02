@@ -9,6 +9,14 @@ def render() -> None:
     st.header("⚙️ Settings")
     settings = Settings.load()
 
+    st.subheader("Job search")
+    labels = {"open_to_relocate": "Open to relocate", "remote": "Remote only", "specific": "Choose my own"}
+    current_label = labels.get(settings.location_mode, labels["open_to_relocate"])
+    chosen_label = st.selectbox("Location mode", list(labels.values()), index=list(labels.values()).index(current_label))
+    settings.location_mode = next(k for k, v in labels.items() if v == chosen_label)
+    if settings.location_mode == "specific":
+        settings.location = st.text_input("Your location (city)", settings.location)
+
     with st.form("settings_form"):
         st.subheader("API keys")
         settings.gemini_api_key = st.text_input("Gemini API key", settings.gemini_api_key, type="password")
@@ -16,13 +24,6 @@ def render() -> None:
         settings.adzuna_app_key = st.text_input("Adzuna app key", settings.adzuna_app_key, type="password")
         settings.jsearch_api_key = st.text_input("JSearch API key", settings.jsearch_api_key, type="password")
 
-        st.subheader("Job search")
-        modes = ["open_to_relocate", "remote", "specific"]
-        settings.location_mode = st.selectbox(
-            "Location mode", modes, index=modes.index(settings.location_mode) if settings.location_mode in modes else 0
-        )
-        if settings.location_mode == "specific":
-            settings.location = st.text_input("Specific location (city)", settings.location)
         settings.keywords = st.text_input("Default keywords", settings.keywords)
 
         st.subheader("Resume")
