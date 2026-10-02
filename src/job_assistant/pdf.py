@@ -8,6 +8,8 @@ from pathlib import Path
 from .config import DATA_DIR
 
 BIN_DIR = Path(__file__).resolve().parents[2] / "bin"
+if getattr(__import__("sys"), "frozen", False):  # PyInstaller bundle
+    BIN_DIR = Path(getattr(__import__("sys"), "_MEIPASS")) / "bin"
 TECTONIC = BIN_DIR / "tectonic.exe"
 
 

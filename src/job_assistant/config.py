@@ -6,7 +6,12 @@ import json
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
-DATA_DIR = Path(__file__).resolve().parents[2] / "data"
+import sys
+
+_root = Path(__file__).resolve().parents[2]
+if getattr(sys, "frozen", False):  # running as packaged exe: keep data next to the exe
+    _root = Path(sys.executable).resolve().parent
+DATA_DIR = _root / "data"
 SETTINGS_PATH = DATA_DIR / "settings.json"
 
 
