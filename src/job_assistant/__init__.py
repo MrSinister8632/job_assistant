@@ -11,6 +11,10 @@ def main() -> None:
     from .gui.app import MainWindow
 
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+    from .gui.style import QSS
+
+    app.setStyleSheet(QSS)
     window = MainWindow()
     window.show()
 
