@@ -13,6 +13,14 @@ def main() -> None:
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
+
+    from .interviews import reminder_text
+    from PySide6.QtWidgets import QMessageBox
+
+    reminder = reminder_text()
+    if reminder:
+        QMessageBox.information(window, "Upcoming interviews", reminder)
+
     sys.exit(app.exec())
 
 

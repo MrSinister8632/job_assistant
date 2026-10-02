@@ -2,11 +2,12 @@
 
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QTableWidget,
-    QTableWidgetItem, QHeaderView,
+    QTableWidgetItem, QHeaderView, QMessageBox,
 )
 
 from ..config import Settings
 from ..storage import get_conn
+from .. import interviews as interviews_mod
 
 
 class ApplicationsTab(QWidget):
@@ -20,10 +21,13 @@ class ApplicationsTab(QWidget):
 
         refresh = QPushButton("Refresh")
         refresh.clicked.connect(self.reload)
+        export_btn = QPushButton("Export interviews (.ics)")
+        export_btn.clicked.connect(self._export)
         self.count_label = QLabel("")
 
         top_btn = QHBoxLayout()
         top_btn.addWidget(refresh)
+        top_btn.addWidget(export_btn)
         top_btn.addWidget(self.count_label)
         top_btn.addStretch()
 
@@ -45,3 +49,7 @@ class ApplicationsTab(QWidget):
             for col, val in enumerate((r["title"], r["company"], r["status"], r["applied_at"], r["notes"])):
                 self.table.setItem(i, col, QTableWidgetItem(str(val or "")))
         self.count_label.setText(f"{len(rows)} applications.")
+
+    def _export(self) -> None:
+        path = interviews_mod.export_ics()
+        QMessageBox.information(self, "Exported", f"Interviews exported to:\n{path}")
