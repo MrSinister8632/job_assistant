@@ -17,7 +17,6 @@ SETTINGS_PATH = DATA_DIR / "settings.json"
 
 @dataclass
 class Settings:
-    groq_api_key: str = ""
     gemini_api_key: str = ""
     adzuna_app_id: str = ""
     adzuna_app_key: str = ""

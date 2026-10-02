@@ -16,8 +16,6 @@ class SettingsTab(QWidget):
         self.settings = settings
         form = QFormLayout()
 
-        self.groq_key = QLineEdit(settings.groq_api_key)
-        self.groq_key.setEchoMode(QLineEdit.Password)
         self.gemini_key = QLineEdit(settings.gemini_api_key)
         self.gemini_key.setEchoMode(QLineEdit.Password)
         self.adzuna_id = QLineEdit(settings.adzuna_app_id)
@@ -38,7 +36,6 @@ class SettingsTab(QWidget):
         self.resume_pages.setValue(settings.resume_pages)
         self.keywords = QLineEdit(settings.keywords)
 
-        form.addRow("Groq API key:", self.groq_key)
         form.addRow("Gemini API key:", self.gemini_key)
         form.addRow("Adzuna app id:", self.adzuna_id)
         form.addRow("Adzuna app key:", self.adzuna_key)
@@ -74,7 +71,6 @@ class SettingsTab(QWidget):
             line.setText(path)
 
     def save(self) -> None:
-        self.settings.groq_api_key = self.groq_key.text().strip()
         self.settings.gemini_api_key = self.gemini_key.text().strip()
         self.settings.adzuna_app_id = self.adzuna_id.text().strip()
         self.settings.adzuna_app_key = self.adzuna_key.text().strip()
