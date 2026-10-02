@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         tabs = QTabWidget()
         self.settings_tab = SettingsTab(self.settings)
         tabs.addTab(self.settings_tab, "Settings")
-        tabs.addTab(SearchTab(), "Search")
+        tabs.addTab(SearchTab(self.settings), "Search")
         tabs.addTab(ReviewTab(), "Review")
         tabs.addTab(ApplicationsTab(), "Applications")
         self.setCentralWidget(tabs)
