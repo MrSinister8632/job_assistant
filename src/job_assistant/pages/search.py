@@ -2,8 +2,8 @@
 
 import streamlit as st
 
-from ..config import Settings
-from .. import jobs as jobs_mod
+from job_assistant.config import Settings
+from job_assistant import jobs as jobs_mod
 
 
 def render() -> None:
@@ -19,8 +19,8 @@ def render() -> None:
         if use_resume:
             with st.spinner("Deriving queries from your resume…"):
                 try:
-                    from ..agents.resume_modifier import read_base_resume
-                    from ..llm import complete
+                    from job_assistant.agents.resume_modifier import read_base_resume
+                    from job_assistant.llm import complete
 
                     resume_text = read_base_resume(settings)
                     derived = complete(

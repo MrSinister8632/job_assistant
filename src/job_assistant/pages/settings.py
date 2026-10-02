@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from ..config import Settings
+from job_assistant.config import Settings
 
 
 def render() -> None:

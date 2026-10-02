@@ -3,9 +3,9 @@
 import streamlit as st
 import pandas as pd
 
-from ..config import Settings
-from ..storage import get_conn
-from .. import interviews as interviews_mod
+from job_assistant.config import Settings
+from job_assistant.storage import get_conn
+from job_assistant import interviews as interviews_mod
 
 
 def render() -> None:

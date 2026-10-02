@@ -2,8 +2,8 @@
 
 import streamlit as st
 
-from ..config import Settings
-from ..storage import get_conn
+from job_assistant.config import Settings
+from job_assistant.storage import get_conn
 
 
 def render() -> None:
