@@ -11,7 +11,7 @@ dependencies = [
     "google-genai>=2.27.0",
     "httpx>=0.28.1",
     "pypdf>=6.19.0",
-    "pyside6>=6.11.2",
+    "streamlit>=1.64.0",
 ]
 
 [project.scripts]

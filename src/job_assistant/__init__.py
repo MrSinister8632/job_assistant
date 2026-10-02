@@ -1,31 +1,15 @@
-"""Entry point: launch the Qt application."""
+"""Entry point: launch the Streamlit app."""
 
 from __future__ import annotations
 
+import subprocess
 import sys
+from pathlib import Path
 
 
 def main() -> None:
-    from PySide6.QtWidgets import QApplication
-
-    from .gui.app import MainWindow
-
-    app = QApplication(sys.argv)
-    app.setStyle("Fusion")
-    from .gui.style import QSS
-
-    app.setStyleSheet(QSS)
-    window = MainWindow()
-    window.show()
-
-    from .interviews import reminder_text
-    from PySide6.QtWidgets import QMessageBox
-
-    reminder = reminder_text()
-    if reminder:
-        QMessageBox.information(window, "Upcoming interviews", reminder)
-
-    sys.exit(app.exec())
+    app_path = Path(__file__).resolve().parent / "streamlit_app.py"
+    subprocess.run([sys.executable, "-m", "streamlit", "run", str(app_path)])
 
 
 if __name__ == "__main__":
